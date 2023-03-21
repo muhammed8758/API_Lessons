@@ -5,10 +5,12 @@ import io.restassured.response.Response;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import pojos.JsonPlaceHolderPojo;
+import util.ObjectMapperUtils;
 
 import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertEquals;
 
 public class Post05ObjectMapper_Pojo extends JsonPlaceHolderBaseUrl {
     /*
@@ -46,7 +48,15 @@ public class Post05ObjectMapper_Pojo extends JsonPlaceHolderBaseUrl {
         response.prettyPrint();
 
         //Do assertions
-        new ObjectMapper().readValue(response.asString(), JsonPlaceHolderPojo.class);
+        JsonPlaceHolderPojo actualData = ObjectMapperUtils.convertJsonToJava(response.asString(),JsonPlaceHolderPojo.class);
+        System.out.println("actualData = " + actualData);
+
+
+        assertEquals(201, response.statusCode());
+        assertEquals(expectedData.getUserId(), actualData.getUserId());
+        assertEquals(expectedData.getTitle(), actualData.getTitle());
+        assertEquals(expectedData.getCompleted(), actualData.getCompleted());
+
 
 
 
